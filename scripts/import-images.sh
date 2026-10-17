@@ -52,15 +52,16 @@ fetch "$WP/2025/02/pexels-tara-winstead-7111602-scaled.jpg"         svc-monthly.
 fetch "$WP/2025/02/pexels-n-voitkevich-6863260-scaled.jpg"          svc-admin.jpg
 
 # ---- hero: responsive sizes (preloaded on the home page)
-convert "$TMP/hero.jpg" -auto-orient -strip -resize "1600x>" -interlace JPEG -quality 78 "$OUT/hero-1600.jpg"
-webp "$TMP/hero.jpg" "$OUT/hero-1600.webp" 72
+convert "$TMP/hero.jpg" -auto-orient -strip -resize "1600x>" -interlace JPEG -quality 62 "$OUT/hero-1600.jpg"
+convert "$TMP/hero.jpg" -auto-orient -strip -resize "1600x>" "$TMP/hero-1600.png"
+webp "$TMP/hero-1600.png" "$OUT/hero-1600.webp" 55
 convert "$TMP/hero.jpg" -auto-orient -strip -resize "800x>" "$TMP/hero-800.png"
-webp "$TMP/hero-800.png" "$OUT/hero-800.webp" 72
+webp "$TMP/hero-800.png" "$OUT/hero-800.webp" 55
 
 # ---- content photos
 for s in svc-catch-up svc-clean-up svc-monthly svc-admin; do photo "$s.jpg" "$s" 900; done
-graphic about-1.png about-1 700 900
-graphic about-2.png about-2 700 900
+photo about-1.png about-1 800
+photo about-2.png about-2 800
 
 # ---- badges and logos (2x the display size for sharp screens)
 graphic qb-gold.png    qb-gold    240 240
@@ -76,10 +77,17 @@ for c in client-stephanie client-kendra; do
 done
 
 # ---- icons
-convert "$TMP/icon.png" -resize 192x192 "$OUT/icon-192.png"
-convert "$TMP/icon.png" -resize 512x512 "$OUT/icon-512.png"
-convert "$TMP/icon.png" -resize 180x180 -background white -alpha remove "$OUT/apple-touch-icon.png"
-convert "$TMP/icon.png" -define icon:auto-resize=48,32,16 favicon.ico
+# The source icon is white on transparent, so set it on the brand green
+# (otherwise it disappears on light browser tabs and home screens).
+icon() { # icon <size> <out>
+  convert -size "${1}x${1}" xc:"#143630" \( "$TMP/icon.png" -resize "$(( $1 * 72 / 100 ))x$(( $1 * 72 / 100 ))" \) \
+    -gravity center -composite -strip "$2"
+}
+icon 192 "$OUT/icon-192.png"
+icon 512 "$OUT/icon-512.png"
+icon 180 "$OUT/apple-touch-icon.png"
+icon 48 "$TMP/fav48.png"
+convert "$TMP/fav48.png" -define icon:auto-resize=48,32,16 favicon.ico
 
 # ---- social share image (1200x630): darkened hero + white logo
 convert "$TMP/hero.jpg" -resize 1200x630^ -gravity center -extent 1200x630 \
