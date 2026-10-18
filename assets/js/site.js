@@ -180,7 +180,7 @@
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
       .then(function (res) {
         if (res.ok && res.body.success !== false) {
-          window.location.href = "/thank-you/";
+          window.location.href = form.dataset.thanks || "/thank-you/";
         } else {
           throw new Error(res.body && res.body.message);
         }
