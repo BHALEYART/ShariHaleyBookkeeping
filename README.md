@@ -26,7 +26,7 @@ Old WordPress URLs (`/about/`, `/wp-admin/`, etc.) redirect via `vercel.json`. T
 
 ## Editing
 
-Edit the HTML directly. Header, footer, and structured data (JSON-LD) are repeated in each page, so change them everywhere. When page content changes, update `<lastmod>` in `sitemap.xml`.
+Edit the HTML directly. Header, footer, and structured data (JSON-LD) are repeated in each page, so change them everywhere. Pages load `site.css?v=…` and `site.js?v=…`: when you change either file, change its `?v=` value on every page so browsers fetch the new copy instead of a cached one. When page content changes, update `<lastmod>` in `sitemap.xml`.
 
 ## Accessibility
 
