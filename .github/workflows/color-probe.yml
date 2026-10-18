@@ -1,0 +1,29 @@
+name: Color probe (temporary)
+on:
+  push:
+    branches: [tmp-color-probe]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract theme colors from the WordPress site
+        run: |
+          mkdir p && cd p
+          curl -fsSL https://sharihaleybookkeeping.com/ -o home.html
+          curl -fsSL https://sharihaleybookkeeping.com/about-us/ -o about.html
+          curl -fsSL https://sharihaleybookkeeping.com/our-services/ -o services.html
+          grep -ohE "href=['\"][^'\"]+\.css[^'\"]*" *.html | sed -E "s/^href=.//" | sort -u > css.txt
+          echo "### STYLESHEETS"; cat css.txt
+          n=0
+          while read -r c; do n=$((n+1)); curl -fsSL "$c" -o "s$n.css" || true; done < css.txt
+          # Keep only site-specific CSS (Elementor kit/post files + inline styles), not plugin/theme defaults
+          : > site.css
+          i=0; while read -r c; do i=$((i+1)); case "$c" in *elementor/css*|*uploads*) cat "s$i.css" >> site.css ;; esac; done < css.txt
+          sed -n '/<style/,/<\/style>/p' *.html >> site.css
+          echo "### GLOBAL COLORS"
+          grep -ohE -- "--e-global-color-[A-Za-z0-9]+:#[0-9A-Fa-f]{3,8}" site.css *.html | sort -u
+          echo "### TOP HEX IN SITE CSS"
+          grep -ohE "#[0-9A-Fa-f]{6}\b" site.css | tr a-f A-F | sort | uniq -c | sort -rn | head -30
+          echo "### RGBA IN SITE CSS"
+          grep -ohE "rgba?\([0-9 ,.]+\)" site.css | sort | uniq -c | sort -rn | head -15
+          echo "### END"
