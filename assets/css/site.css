@@ -164,11 +164,38 @@ a:hover { color: var(--green-900); }
 .hero h1, .hero h2 { color: var(--white); }
 .hero .eyebrow { color: var(--gold-300); }
 .hero-lede { font-size: 1.2rem; max-width: 40rem; color: #edf2f0; }
-.hero-points {
-  list-style: none; padding: 0; margin: 2rem 0 0;
-  display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; color: #edf2f0; font-weight: 600;
+/* Hero metric badges: fade up one after another. Under reduced motion the
+   global rule removes the animation, leaving them simply visible. */
+.hero-grid { display: grid; gap: 2.5rem; align-items: center; }
+@media (min-width: 1000px) { .hero-grid { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); } }
+.hero-badges {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.85rem;
 }
-.hero-points li::before { content: "✓"; color: var(--gold-300); margin-right: 0.45rem; }
+.metric {
+  display: flex; flex-direction: column; gap: 0.2rem;
+  padding: 1.1rem 1.15rem 1.15rem;
+  background: rgb(20 54 48 / 72%);
+  border: 1px solid rgb(227 199 102 / 35%);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 25%);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  animation: metric-in 0.7s cubic-bezier(.2,.7,.2,1) both;
+}
+.metric:nth-child(1) { animation-delay: 0.35s; }
+.metric:nth-child(2) { animation-delay: 0.55s; }
+.metric:nth-child(3) { animation-delay: 0.75s; }
+.metric:nth-child(4) { animation-delay: 0.95s; }
+@media (min-width: 1000px) {
+  .metric:nth-child(even) { transform: translateY(1.5rem); }
+  .metric:nth-child(even) { animation-name: metric-in-offset; }
+}
+.metric-icon { color: var(--gold-300); margin-bottom: 0.35rem; }
+.metric-value { font-family: var(--serif); font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.2rem); font-weight: 700; line-height: 1.1; color: var(--white); }
+.metric-label { font-size: 0.95rem; line-height: 1.35; color: #e2ebe8; }
+@keyframes metric-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes metric-in-offset { from { opacity: 0; transform: translateY(calc(1.5rem + 14px)); } to { opacity: 1; transform: translateY(1.5rem); } }
+
 
 .page-hero { background: var(--green-900); color: var(--white); }
 .page-hero .wrap { padding-block: clamp(2.5rem, 6vw, 4.5rem); }
