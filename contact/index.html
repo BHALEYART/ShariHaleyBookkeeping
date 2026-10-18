@@ -238,7 +238,15 @@
   <div class="wrap form-shell">
     <form id="intake-form" class="intake" action="https://api.web3forms.com/submit" method="POST" data-thanks="../thank-you/" aria-labelledby="form-title" novalidate>
   <h2 id="form-title">Free consultation request</h2>
-  <p class="req-note">Takes about 3 minutes. Fields marked <span class="req" aria-hidden="true">*</span><span class="visually-hidden">with an asterisk</span> are required. Please don’t include Social Security, bank, or card numbers.</p>
+  <fieldset class="mode-toggle">
+    <legend class="group-legend">Choose a form</legend>
+    <div class="choices cols-2">
+      <label class="choice" for="form_type-simple"><input type="radio" id="form_type-simple" name="form_type" value="Simple"><span>Simple<small>Just the basics, about 1 minute</small></span></label>
+      <label class="choice" for="form_type-advanced"><input type="radio" id="form_type-advanced" name="form_type" value="Advanced" checked><span>Advanced<small>Tell us more for a faster start, about 3 minutes</small></span></label>
+    </div>
+    <p id="mode-status" class="visually-hidden" aria-live="polite"></p>
+  </fieldset>
+  <p class="req-note"><span data-mode="Simple" hidden>Takes about 1 minute.</span><span data-mode="Advanced">Takes about 3 minutes.</span> Fields marked <span class="req" aria-hidden="true">*</span><span class="visually-hidden">with an asterisk</span> are required. Please don’t include Social Security, bank, or card numbers.</p>
 
   <div id="error-summary" class="error-summary" role="alert" tabindex="-1" hidden>
     <h2>There is a problem with your form</h2>
@@ -281,15 +289,15 @@
   <div class="choices cols-2"><label class="choice" for="preferred_contact-phone-call"><input type="radio" id="preferred_contact-phone-call" name="preferred_contact" value="Phone call"><span>Phone call</span></label><label class="choice" for="preferred_contact-text-message"><input type="radio" id="preferred_contact-text-message" name="preferred_contact" value="Text message"><span>Text message</span></label><label class="choice" for="preferred_contact-email"><input type="radio" id="preferred_contact-email" name="preferred_contact" value="Email"><span>Email</span></label></div>
   <span class="error-msg" id="contact_method-error" aria-live="polite"></span>
 </fieldset>
-    <fieldset data-group="best_time" aria-describedby="best_time-error">
+    <div data-mode="Advanced"><fieldset data-group="best_time" aria-describedby="best_time-error">
   <legend class="group-legend">Best time to reach you</legend>
   <div class="choices cols-2"><label class="choice" for="best_time-morning"><input type="checkbox" id="best_time-morning" name="best_time[]" value="Morning"><span>Morning</span></label><label class="choice" for="best_time-midday"><input type="checkbox" id="best_time-midday" name="best_time[]" value="Midday"><span>Midday</span></label><label class="choice" for="best_time-afternoon"><input type="checkbox" id="best_time-afternoon" name="best_time[]" value="Afternoon"><span>Afternoon</span></label><label class="choice" for="best_time-evening"><input type="checkbox" id="best_time-evening" name="best_time[]" value="Evening"><span>Evening</span></label></div>
   <span class="error-msg" id="best_time-error" aria-live="polite"></span>
-</fieldset>
+</fieldset></div>
     </div>
   </fieldset>
 
-  <fieldset>
+  <fieldset data-mode="Advanced">
     <legend class="step-legend"><span class="num" aria-hidden="true">2</span>Your business</legend>
     <div class="form-grid cols-2">
       <div class="field">
@@ -325,7 +333,7 @@
     </div>
   </fieldset>
 
-  <fieldset>
+  <fieldset data-mode="Advanced">
     <legend class="step-legend"><span class="num" aria-hidden="true">3</span>Where your books stand</legend>
     <fieldset data-group="software" data-required data-group-msg="Please choose what you use today." aria-describedby="software-error">
   <legend class="group-legend">What do you use to keep your books today? <span class="req" aria-hidden="true">*</span><span class="visually-hidden">(required)</span></legend>
@@ -344,7 +352,7 @@
 </fieldset>
   </fieldset>
 
-  <fieldset>
+  <fieldset data-mode="Advanced">
     <legend class="step-legend"><span class="num" aria-hidden="true">4</span>How we can help</legend>
     <fieldset data-group="services" data-required data-group-msg="Please choose at least one service, or “Not sure — please advise.”" aria-describedby="services-error services-hint">
   <legend class="group-legend">Which services are you interested in? <span class="req" aria-hidden="true">*</span><span class="visually-hidden">(required)</span></legend><span class="hint" id="services-hint">Choose all that apply.</span>
@@ -363,9 +371,14 @@
   <span class="error-msg" id="referral_source-error" aria-live="polite"></span>
 </div>
     </div>
-    <div class="field" style="margin-top:1.1rem">
-      <label for="message">Anything else Shari should know? <span class="hint" style="display:inline">(optional)</span></label>
-      <textarea id="message" name="message" rows="5" aria-describedby="message-error"></textarea>
+  </fieldset>
+
+  <fieldset>
+    <legend class="step-legend"><span class="num" aria-hidden="true">5</span>Your message</legend>
+    <div class="field">
+      <label for="message"><span data-mode="Simple" hidden>How can Shari help?</span><span data-mode="Advanced">Anything else Shari should know?</span> <span class="hint" style="display:inline">(optional)</span></label>
+      <span class="hint" id="message-hint" data-mode="Simple" hidden>A sentence or two is plenty, such as “I’m 6 months behind” or “I need help with payroll.”</span>
+      <textarea id="message" name="message" rows="5" aria-describedby="message-error message-hint"></textarea>
       <span class="error-msg" id="message-error" aria-live="polite"></span>
     </div>
   </fieldset>

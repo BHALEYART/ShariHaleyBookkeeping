@@ -46,6 +46,38 @@
   var summary = document.getElementById("error-summary");
   var status = document.getElementById("form-status");
   var submitBtn = form.querySelector('[type="submit"]');
+  var subject = form.querySelector('input[name="subject"]');
+  var subjectBase = subject ? subject.value : "";
+
+  /* Simple / Advanced: questions for the other mode are hidden AND disabled,
+     so they're skipped by validation and left out of the submission. */
+  function applyMode(mode, announce) {
+    form.querySelectorAll("[data-mode]").forEach(function (el) {
+      var on = el.dataset.mode === mode;
+      el.hidden = !on;
+      if (el.tagName === "FIELDSET") el.disabled = !on;
+      el.querySelectorAll("fieldset").forEach(function (f) { f.disabled = !on; });
+    });
+    var n = 0;
+    form.querySelectorAll(".step-legend .num").forEach(function (num) {
+      if (!num.closest("[hidden]")) num.textContent = ++n;
+    });
+    if (subject) subject.value = subjectBase + " (" + mode + " form)";
+    summary.hidden = true;
+    if (announce) {
+      document.getElementById("mode-status").textContent = mode === "Simple"
+        ? "Simple form selected. Showing basic questions only."
+        : "Advanced form selected. Showing all questions.";
+    }
+  }
+  var modeRadios = form.querySelectorAll('input[name="form_type"]');
+  modeRadios.forEach(function (r) {
+    r.addEventListener("change", function () { if (r.checked) applyMode(r.value, true); });
+  });
+  if (modeRadios.length) {
+    document.getElementById("form_type-simple").checked = true; // Simple is the default
+    applyMode("Simple", false);
+  }
 
   function errorEl(id) { return document.getElementById(id + "-error"); }
 
@@ -101,6 +133,7 @@
   // Re-validate as people fix things, but don't nag while they first type.
   form.addEventListener("change", function (e) {
     var t = e.target;
+    if (t.name === "form_type") return;
     var fs = t.closest("fieldset[data-group]");
     if (fs && fs.classList.contains("fieldset-invalid")) validateGroup(fs);
     else if (t.type === "checkbox" && t.required) validateConsent(t);
@@ -114,11 +147,12 @@
   function runValidation() {
     var problems = [];
     form.querySelectorAll("input[type=text][required], input[type=email], input[type=tel], select[required], textarea[required]").forEach(function (el) {
-      if (el.closest(".hp")) return;
+      if (el.closest(".hp") || el.matches(":disabled")) return;
       var m = validateField(el);
       if (m) problems.push({ el: el, msg: m, name: labelText(el) });
     });
     form.querySelectorAll("fieldset[data-group][data-required]").forEach(function (fs) {
+      if (fs.matches(":disabled")) return;
       var p = validateGroup(fs);
       if (p) problems.push(p);
     });

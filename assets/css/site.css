@@ -25,6 +25,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 6.5rem; scroll-padding-bottom: 4.5rem; }
 @media (prefers-reduced-motion: reduce) {
@@ -409,3 +410,8 @@ a:hover { color: var(--green-900); }
   .site-header, .call-bar, .nav-toggle, .cta-band, .video-facade { display: none !important; }
   body { background: #fff; }
 }
+
+/* Simple / Advanced form switch */
+.mode-toggle { margin-bottom: 1.25rem !important; }
+.mode-toggle .choice small { margin-top: 0.1rem; }
+.no-js .mode-toggle { display: none; }
