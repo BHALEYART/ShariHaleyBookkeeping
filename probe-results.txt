@@ -1,0 +1,122 @@
+### DNS
+-- sharihaleybookkeeping.com
+216.198.79.1
+-- www.sharihaleybookkeeping.com
+sharihaleybookkeeping.com.
+216.198.79.1
+sharihaleybookkeeping.com.
+ns75.domaincontrol.com.
+ns76.domaincontrol.com.
+
+### HEAD https://sharihaleybookkeeping.com/
+HTTP/2 308 
+cache-control: public, max-age=0, must-revalidate
+location: https://www.sharihaleybookkeeping.com/
+server: Vercel
+x-vercel-id: iad1::2ggml-1792432892355-9dc335990241
+HTTP/2 200 
+age: 5870
+cache-control: public, max-age=0, must-revalidate
+etag: "c0bbeeb1b7eb5a834415e3265d7a761d"
+last-modified: Mon, 19 Oct 2026 16:23:41 GMT
+server: Vercel
+x-vercel-cache: HIT
+x-vercel-id: iad1::mptzm-1792432892448-4f1e0d1c3cb5
+
+### HEAD https://www.sharihaleybookkeeping.com/
+HTTP/2 200 
+age: 5870
+cache-control: public, max-age=0, must-revalidate
+etag: "c0bbeeb1b7eb5a834415e3265d7a761d"
+last-modified: Mon, 19 Oct 2026 16:23:41 GMT
+server: Vercel
+x-vercel-cache: HIT
+x-vercel-id: iad1::4mps7-1792432892582-9bf43f81e61a
+
+### HEAD https://sharihaleybookkeeping.com/?utm_source=gmb&utm_medium=organic
+HTTP/2 308 
+cache-control: public, max-age=0, must-revalidate
+location: https://www.sharihaleybookkeeping.com/?utm_source=gmb&utm_medium=organic
+server: Vercel
+x-vercel-id: iad1::k2mj4-1792432892698-fd7e81c8048b
+HTTP/2 200 
+age: 5871
+cache-control: public, max-age=0, must-revalidate
+etag: "c0bbeeb1b7eb5a834415e3265d7a761d"
+last-modified: Mon, 19 Oct 2026 16:23:41 GMT
+server: Vercel
+x-vercel-cache: HIT
+x-vercel-id: iad1::fw9z9-1792432892824-3c56273bbb52
+
+### HEAD https://sharihaleybookkeeping.com/about-us/
+HTTP/2 308 
+cache-control: public, max-age=0, must-revalidate
+location: https://www.sharihaleybookkeeping.com/about-us/
+server: Vercel
+x-vercel-id: iad1::g7l7z-1792432892877-fbf5303295a5
+HTTP/2 200 
+age: 4319
+cache-control: public, max-age=0, must-revalidate
+etag: "ed2d43bf47e58425634693bf735b63ed"
+last-modified: Mon, 19 Oct 2026 16:49:33 GMT
+server: Vercel
+x-vercel-cache: HIT
+x-vercel-id: iad1::52hl4-1792432892960-eb4124098e99
+
+### HEAD https://sharihaleybookkeeping.com/our-services/
+HTTP/2 308 
+cache-control: public, max-age=0, must-revalidate
+location: https://www.sharihaleybookkeeping.com/our-services/
+server: Vercel
+x-vercel-id: iad1::lszh8-1792432893041-22e9436793b6
+HTTP/2 200 
+age: 4315
+cache-control: public, max-age=0, must-revalidate
+etag: "172f86745191533bfaeb03e9606bf252"
+last-modified: Mon, 19 Oct 2026 16:49:37 GMT
+server: Vercel
+x-vercel-cache: HIT
+x-vercel-id: iad1::8gwlr-1792432893165-0f7c7986749c
+
+### HEAD https://sharihaleybookkeeping.com/contact/
+HTTP/2 308 
+cache-control: public, max-age=0, must-revalidate
+location: https://www.sharihaleybookkeeping.com/contact/
+server: Vercel
+x-vercel-id: iad1::4r4q5-1792432893244-5bb0266e3d51
+HTTP/2 200 
+age: 4302
+cache-control: public, max-age=0, must-revalidate
+etag: "de8339f35144a7adec352a0d52320add"
+last-modified: Mon, 19 Oct 2026 16:49:50 GMT
+server: Vercel
+x-vercel-cache: HIT
+x-vercel-id: iad1::bd92t-1792432893339-5a26aa1a6738
+
+### HEAD https://sharihaleybookkeeping.com/about/
+HTTP/2 308 
+cache-control: public, max-age=0, must-revalidate
+location: https://www.sharihaleybookkeeping.com/about/
+server: Vercel
+x-vercel-id: iad1::4tvmt-1792432893403-4256c609d11e
+HTTP/2 308 
+cache-control: public, max-age=0, must-revalidate
+location: /about-us/
+server: Vercel
+x-vercel-id: iad1::lzm7r-1792432893513-562c00846de6
+HTTP/2 200 
+age: 4320
+cache-control: public, max-age=0, must-revalidate
+etag: "ed2d43bf47e58425634693bf735b63ed"
+last-modified: Mon, 19 Oct 2026 16:49:33 GMT
+server: Vercel
+x-vercel-cache: HIT
+x-vercel-id: iad1::cwrx4-1792432893523-f1604f2d6c50
+
+### WHICH SITE IS SERVED AT /
+<title>Bookkeeper in DeLand, FL | Shari Haley Bookkeeping</title>
+elementor mentions: 0
+site.css?v=ae2088c7
+
+### SERVICE WORKER REFERENCES (old site)
+### END
