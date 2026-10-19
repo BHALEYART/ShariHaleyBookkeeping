@@ -240,10 +240,17 @@
           throw new Error(res.body && res.body.message);
         }
       })
-      .catch(function () {
+      .catch(function (err) {
         sending = false;
+        var reason = (err && err.message) || "";
         out.className = "form-status is-error";
-        out.textContent = opts.failText || "Sorry, your request didn't go through. Please try again, or call 386-320-9378.";
+        if (/activat/i.test(reason)) {
+          // First submission to a new FormSubmit address: it emails an activation link.
+          out.textContent = "This form isn't activated yet. An activation email has been sent to the business inbox. Once its “Activate Form” link is clicked, please try again, or call 386-320-9378.";
+        } else {
+          out.textContent = opts.failText ||
+            ("Sorry, your request didn't go through" + (reason && !/fetch|network|load failed/i.test(reason) ? " (" + reason + ")" : "") + ". Please try again, or call 386-320-9378.");
+        }
         submitBtn.disabled = false;
         submitBtn.textContent = idleLabel();
       });
