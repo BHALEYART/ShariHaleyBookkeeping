@@ -50,7 +50,7 @@
   var summary = document.getElementById("error-summary");
   var status = document.getElementById("form-status");
   var submitBtn = form.querySelector('[type="submit"]');
-  var subject = form.querySelector('input[name="subject"]');
+  var subject = form.querySelector('input[name="_subject"]');
   var subjectBase = subject ? subject.value : "";
 
   /* Simple / Advanced: questions for the other mode are hidden AND disabled,
@@ -216,7 +216,7 @@
   function send(extra, opts) {
     opts = opts || {};
     var data = collect(extra);
-    if (data.botcheck || sending) return; // honeypot tripped, or already sending
+    if (data._honey || sending) return; // honeypot tripped, or already sending
     sending = true;
     var out = opts.statusEl || status;
     submitBtn.disabled = true;
@@ -224,14 +224,16 @@
     out.className = "form-status";
     out.textContent = opts.sendingText || "Sending your request…";
 
-    fetch(form.action, {
+    // FormSubmit's AJAX endpoint returns JSON instead of redirecting.
+    fetch(form.action.replace("formsubmit.co/", "formsubmit.co/ajax/"), {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify(data)
     })
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
       .then(function (res) {
-        if (res.ok && res.body.success !== false) {
+        // FormSubmit sends success as the string "true"/"false".
+        if (res.ok && String(res.body.success) !== "false") {
           var thanks = form.dataset.thanks || "/thank-you/";
           window.location.href = thanks + (opts.booked ? "?meeting=booked" : "");
         } else {

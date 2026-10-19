@@ -19,7 +19,7 @@ Old WordPress URLs (`/about/`, `/wp-admin/`, etc.) redirect via `vercel.json`. T
 ## Launch checklist
 
 1. **Images** — the first push to `main` runs the *Import images* GitHub Action, which downloads the current images from WordPress, makes WebP + resized versions, and commits them to `assets/img/`. **This must happen before the domain stops pointing at WordPress.** Re-run any time from the Actions tab.
-2. **Form** — create a free access key at [web3forms.com](https://web3forms.com) using the email that should receive requests, then replace `YOUR_WEB3FORMS_ACCESS_KEY` in `contact/index.html`. Send a test submission.
+2. **Form** — requests go to sharihaleybookkeeping@gmail.com through [FormSubmit](https://formsubmit.co) (no account or key). The **first** submission triggers a one-time activation email to that inbox; Shari must click its link before requests are delivered, so send a test and activate it before launch. Optional: after activating, FormSubmit offers a random alias you can swap into the form's `action` so the address isn't in the page source.
 3. **Deploy** — import the repo into Vercel (framework: *Other*, no build command, output directory `.`), add the domain, and update DNS.
 4. **Search Console** — verify the domain in Google Search Console and submit `https://sharihaleybookkeeping.com/sitemap.xml`. Do the same in Bing Webmaster Tools.
 5. **Google Business Profile** — make sure the name, phone (386-320-9378), and website match the site exactly; this drives local "bookkeeper near me" results more than anything on the page.

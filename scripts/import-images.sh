@@ -40,7 +40,6 @@ fetch "$WP/elementor/thumbs/HaleyLogo-rmqagx7dsslk00o7jgyzb4zgl34ax10u7h0gyvfo3o
 fetch "$WP/2025/02/cropped-BK-logo-270x270.png"                     icon.png
 fetch "$WP/2025/02/pexels-karolina-grabowska-4386375-scaled.jpg"    hero.jpg
 fetch "$WP/2025/02/image-220x300.png"                               chamber.png
-fetch "$WP/2025/02/QB-ProAdvisor-Gold-Tier-Badge-266x300.png"       qb-gold.png
 fetch "$WP/2025/02/QB-ProAdvisor-Payroll-Badge-300x300.png"         qb-payroll.png
 fetch "$WP/2025/03/image-5.png"                                     about-1.png
 fetch "$WP/2025/03/image-4.png"                                     about-2.png
@@ -64,7 +63,6 @@ photo about-1.png about-1 800
 photo about-2.png about-2 800
 
 # ---- badges and logos (2x the display size for sharp screens)
-graphic qb-gold.png    qb-gold    240 240
 graphic qb-payroll.png qb-payroll 240 240
 graphic chamber.png    chamber    240 240
 graphic logo-white.png logo-white 400 140
