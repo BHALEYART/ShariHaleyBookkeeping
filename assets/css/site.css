@@ -442,3 +442,11 @@ a:hover { color: var(--green-900); }
 .mode-toggle { margin-bottom: 1.25rem !important; }
 .mode-toggle .choice small { margin-top: 0.1rem; }
 .no-js .mode-toggle { display: none; }
+
+/* Calendly step */
+.no-js .js-only { display: none; }
+.scheduler h2 { margin-bottom: 0.5rem; }
+.scheduler > p { color: var(--ink-soft); }
+.scheduler-frame { margin: 1rem 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--white); }
+.scheduler-frame iframe { display: block; width: 100%; height: 720px; border: 0; }
+@media (max-width: 640px) { .scheduler-frame iframe { height: 1050px; } }

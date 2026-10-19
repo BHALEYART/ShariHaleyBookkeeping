@@ -38,6 +38,10 @@
     });
   });
 
+  /* ---------- Thank-you page: booked-meeting note ---------- */
+  var bookedNote = document.getElementById("booked-note");
+  if (bookedNote && /[?&]meeting=booked\b/.test(location.search)) bookedNote.hidden = false;
+
   /* ---------- Intake form ---------- */
   var form = document.getElementById("intake-form");
   if (!form) return;
@@ -184,27 +188,41 @@
     summary.focus();
   }
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    status.textContent = "";
-    status.className = "form-status";
+  var DEFAULT_LABEL = submitBtn.textContent;
+  var steps = document.getElementById("form-steps");
+  var scheduler = document.getElementById("scheduler");
+  var schedFrame = document.getElementById("scheduler-frame");
+  var schedStatus = document.getElementById("scheduler-status");
+  var bookBox = document.getElementById("book_meeting");
+  var CALENDLY = form.dataset.calendly;
+  var CALENDLY_ORIGIN = "https://calendly.com";
+  var sending = false;
 
-    var problems = runValidation();
-    if (problems.length) { showSummary(problems); return; }
-    summary.hidden = true;
+  function wantsMeeting() { return !!(bookBox && bookBox.checked && CALENDLY && scheduler); }
+  function idleLabel() { return wantsMeeting() ? "Continue to pick a time" : DEFAULT_LABEL; }
+  if (bookBox) bookBox.addEventListener("change", function () { submitBtn.textContent = idleLabel(); });
 
+  function collect(extra) {
     // Combine multi-select checkbox groups into one readable line per question.
-    var raw = new FormData(form);
     var data = {};
-    raw.forEach(function (value, key) {
+    new FormData(form).forEach(function (value, key) {
       var k = key.replace(/\[\]$/, "");
       data[k] = data[k] ? data[k] + ", " + value : value;
     });
-    if (data.botcheck) return; // honeypot tripped: silently drop
+    Object.keys(extra || {}).forEach(function (k) { data[k] = extra[k]; });
+    return data;
+  }
 
+  function send(extra, opts) {
+    opts = opts || {};
+    var data = collect(extra);
+    if (data.botcheck || sending) return; // honeypot tripped, or already sending
+    sending = true;
+    var out = opts.statusEl || status;
     submitBtn.disabled = true;
     submitBtn.textContent = "Sending…";
-    status.textContent = "Sending your request…";
+    out.className = "form-status";
+    out.textContent = opts.sendingText || "Sending your request…";
 
     fetch(form.action, {
       method: "POST",
@@ -214,16 +232,115 @@
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
       .then(function (res) {
         if (res.ok && res.body.success !== false) {
-          window.location.href = form.dataset.thanks || "/thank-you/";
+          var thanks = form.dataset.thanks || "/thank-you/";
+          window.location.href = thanks + (opts.booked ? "?meeting=booked" : "");
         } else {
           throw new Error(res.body && res.body.message);
         }
       })
       .catch(function () {
-        status.className = "form-status is-error";
-        status.textContent = "Sorry, your request didn't go through. Please try again, or call 386-320-9378.";
+        sending = false;
+        out.className = "form-status is-error";
+        out.textContent = opts.failText || "Sorry, your request didn't go through. Please try again, or call 386-320-9378.";
         submitBtn.disabled = false;
-        submitBtn.textContent = "Request my free consultation";
+        submitBtn.textContent = idleLabel();
       });
+  }
+
+  /* ---------- Calendly step ----------
+     The scheduler is Shari's own Calendly page in an iframe, prefilled with the
+     visitor's name and email. Calendly creates the appointment when they confirm;
+     it then posts "calendly.event_scheduled" to this page, which sends the form
+     with the booking attached. Nothing loads from Calendly unless they opt in. */
+  function calendlySrc() {
+    var q = [
+      "embed_domain=" + encodeURIComponent(location.host || "localhost"),
+      "embed_type=Inline",
+      "hide_gdpr_banner=1",
+      "name=" + encodeURIComponent(form.elements.name.value.trim()),
+      "email=" + encodeURIComponent(form.elements.email.value.trim())
+    ];
+    return CALENDLY + (CALENDLY.indexOf("?") > -1 ? "&" : "?") + q.join("&");
+  }
+
+  function openScheduler() {
+    var src = calendlySrc();
+    var iframe = schedFrame.querySelector("iframe");
+    if (!iframe || iframe.dataset.src !== src) {
+      schedFrame.innerHTML = "";
+      iframe = document.createElement("iframe");
+      iframe.title = "Shari Haley’s Calendly scheduler: choose a meeting time";
+      iframe.src = src;
+      iframe.dataset.src = src;
+      iframe.allow = "payment";
+      iframe.addEventListener("load", function () {
+        if (schedStatus.textContent.indexOf("Loading") === 0) schedStatus.textContent = "";
+      });
+      schedFrame.appendChild(iframe);
+      schedStatus.className = "form-status";
+      schedStatus.textContent = "Loading Shari’s calendar…";
+    }
+    steps.hidden = true;
+    scheduler.hidden = false;
+    var title = document.getElementById("scheduler-title");
+    title.focus();
+    title.scrollIntoView({ block: "start" });
+  }
+
+  function closeScheduler() {
+    scheduler.hidden = true;
+    steps.hidden = false;
+    if (bookBox) { bookBox.focus(); bookBox.scrollIntoView({ block: "center" }); }
+  }
+
+  if (scheduler) {
+    document.getElementById("scheduler-back").addEventListener("click", closeScheduler);
+    document.getElementById("scheduler-skip").addEventListener("click", function () {
+      send({ meeting_requested: "Yes", meeting_booked: "No (skipped scheduling)" },
+           { statusEl: schedStatus });
+    });
+
+    window.addEventListener("message", function (e) {
+      if (e.origin !== CALENDLY_ORIGIN || scheduler.hidden) return;
+      var d = e.data;
+      if (!d || typeof d.event !== "string" || d.event.indexOf("calendly.") !== 0) return;
+      var payload = d.payload || {};
+      var iframe = schedFrame.querySelector("iframe");
+
+      if (d.event === "calendly.page_height" && iframe && payload.height) {
+        var h = parseInt(payload.height, 10);
+        if (h > 300) iframe.style.height = h + "px";
+      } else if (d.event === "calendly.profile_page_viewed" || d.event === "calendly.event_type_viewed") {
+        if (schedStatus.textContent.indexOf("Loading") === 0) schedStatus.textContent = "";
+      } else if (d.event === "calendly.date_and_time_selected") {
+        schedStatus.className = "form-status";
+        schedStatus.textContent = "Time selected. Confirm it in the scheduler to finish.";
+      } else if (d.event === "calendly.event_scheduled") {
+        send({
+          meeting_requested: "Yes",
+          meeting_booked: "Yes, booked on Calendly (see Calendly for the time)",
+          meeting_event: (payload.event && payload.event.uri) || "",
+          meeting_invitee: (payload.invitee && payload.invitee.uri) || ""
+        }, {
+          statusEl: schedStatus,
+          booked: true,
+          sendingText: "Meeting booked. Sending your request…",
+          failText: "Your meeting is booked, but your answers didn't send. Please press “Skip” to try sending again, or call 386-320-9378."
+        });
+      }
+    });
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    status.textContent = "";
+    status.className = "form-status";
+
+    var problems = runValidation();
+    if (problems.length) { showSummary(problems); return; }
+    summary.hidden = true;
+
+    if (wantsMeeting()) { openScheduler(); return; }
+    send(bookBox ? { meeting_requested: "No" } : {});
   });
 })();

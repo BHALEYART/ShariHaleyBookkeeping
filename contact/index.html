@@ -29,8 +29,8 @@
 <link rel="icon" href="../assets/img/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
 <link rel="manifest" href="../site.webmanifest">
-<link rel="stylesheet" href="../assets/css/site.css?v=72e3a0ae">
-<script src="../assets/js/site.js?v=73da1e37" defer></script>
+<link rel="stylesheet" href="../assets/css/site.css?v=ae2088c7">
+<script src="../assets/js/site.js?v=755afc33" defer></script>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -236,8 +236,9 @@
 
 <section class="section" id="consultation" aria-label="Consultation request form" style="scroll-margin-top:5rem">
   <div class="wrap form-shell">
-    <form id="intake-form" class="intake" action="https://api.web3forms.com/submit" method="POST" data-thanks="../thank-you/" aria-labelledby="form-title" novalidate>
+    <form id="intake-form" class="intake" action="https://api.web3forms.com/submit" method="POST" data-thanks="../thank-you/" data-calendly="https://calendly.com/sharihaleybookkeeping" aria-labelledby="form-title" novalidate>
   <h2 id="form-title">Free consultation request</h2>
+  <div id="form-steps">
   <fieldset class="mode-toggle">
     <legend class="group-legend">Choose a form</legend>
     <div class="choices cols-2">
@@ -383,6 +384,13 @@
     </div>
   </fieldset>
 
+  <div class="field js-only">
+    <label class="choice" for="book_meeting">
+      <input type="checkbox" id="book_meeting" aria-describedby="book_meeting-hint">
+      <span>Also book a meeting time with Shari <span class="hint" style="display:inline">(optional)</span><small id="book_meeting-hint">After you finish the form, pick a time on Shari’s calendar. Your request and your appointment are sent together.</small></span>
+    </label>
+  </div>
+
   <div class="field">
     <label class="choice" for="consent">
       <input type="checkbox" id="consent" name="consent" value="Yes" required aria-describedby="consent-error">
@@ -394,6 +402,18 @@
   <div class="btn-row">
     <button class="btn btn-green" type="submit">Request my free consultation</button>
   </div>
+  </div>
+
+  <section id="scheduler" class="scheduler" aria-labelledby="scheduler-title" hidden>
+    <h2 id="scheduler-title" tabindex="-1">Pick a meeting time</h2>
+    <p>Your answers are saved. Choose a time below and confirm it. When you do, your request and your appointment are sent to Shari together.</p>
+    <div id="scheduler-frame" class="scheduler-frame"></div>
+    <p id="scheduler-status" class="form-status" role="status" aria-live="polite"></p>
+    <div class="btn-row">
+      <button type="button" class="btn btn-outline" id="scheduler-back">Back to my answers</button>
+      <button type="button" class="btn btn-outline" id="scheduler-skip">Skip — send my request without a time</button>
+    </div>
+  </section>
   <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
 </form>
     <aside class="aside-sticky" aria-label="Contact details">

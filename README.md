@@ -24,6 +24,10 @@ Old WordPress URLs (`/about/`, `/wp-admin/`, etc.) redirect via `vercel.json`. T
 4. **Search Console** — verify the domain in Google Search Console and submit `https://sharihaleybookkeeping.com/sitemap.xml`. Do the same in Bing Webmaster Tools.
 5. **Google Business Profile** — make sure the name, phone (386-320-9378), and website match the site exactly; this drives local "bookkeeper near me" results more than anything on the page.
 
+## Booking a meeting (Calendly)
+
+The form has an optional "Also book a meeting time" checkbox. When it's checked, finishing the form opens Shari's Calendly (`https://calendly.com/sharihaleybookkeeping`, set in `data-calendly` on the form) with the visitor's name and email filled in. When they confirm a time, Calendly creates the appointment and the form sends with `meeting_booked: Yes` plus the Calendly event link. The exact time is in Calendly and its confirmation email. "Skip" sends the request without a time.
+
 ## Editing
 
 Edit the HTML directly. Header, footer, and structured data (JSON-LD) are repeated in each page, so change them everywhere. Pages load `site.css?v=…` and `site.js?v=…`: when you change either file, change its `?v=` value on every page so browsers fetch the new copy instead of a cached one. When page content changes, update `<lastmod>` in `sitemap.xml`.
