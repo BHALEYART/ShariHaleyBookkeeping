@@ -26,7 +26,7 @@ Old WordPress URLs (`/about/`, `/wp-admin/`, etc.) redirect via `vercel.json`. T
 
 ## Booking a meeting (Calendly)
 
-The form has an optional "Also book a meeting time" checkbox. When it's checked, finishing the form opens Shari's Calendly (`https://calendly.com/sharihaleybookkeeping`, set in `data-calendly` on the form) with the visitor's name and email filled in. When they confirm a time, Calendly creates the appointment and the form sends with `meeting_booked: Yes` plus the Calendly event link. The exact time is in Calendly and its confirmation email. "Skip" sends the request without a time.
+The form has an optional "Also book a meeting time" checkbox. When it's checked, "Continue to pick a time" **sends the form first** (marked `meeting_requested: Yes, choosing a time on Calendly`), so Shari gets the request even if the visitor never books. Only after the send succeeds does Shari's Calendly open (`https://calendly.com/sharihaleybookkeeping`, set in `data-calendly` on the form), with the visitor's name and email filled in. Calendly creates the appointment and emails Shari the time; the page then goes to the thank-you page. "Skip" just finishes, since the request is already sent.
 
 ## Editing
 

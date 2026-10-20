@@ -30,7 +30,7 @@
 <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
 <link rel="manifest" href="../site.webmanifest">
 <link rel="stylesheet" href="../assets/css/site.css?v=ae2088c7">
-<script src="../assets/js/site.js?v=9649e853" defer></script>
+<script src="../assets/js/site.js?v=e447ce7e" defer></script>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -388,7 +388,7 @@
   <div class="field js-only">
     <label class="choice" for="book_meeting">
       <input type="checkbox" id="book_meeting" aria-describedby="book_meeting-hint">
-      <span>Also book a meeting time with Shari <span class="hint" style="display:inline">(optional)</span><small id="book_meeting-hint">After you finish the form, pick a time on Shari’s calendar. Your request and your appointment are sent together.</small></span>
+      <span>Also book a meeting time with Shari <span class="hint" style="display:inline">(optional)</span><small id="book_meeting-hint">Your request is sent first, then Shari’s calendar opens so you can pick a time.</small></span>
     </label>
   </div>
 
@@ -407,12 +407,11 @@
 
   <section id="scheduler" class="scheduler" aria-labelledby="scheduler-title" hidden>
     <h2 id="scheduler-title" tabindex="-1">Pick a meeting time</h2>
-    <p>Your answers are saved. Choose a time below and confirm it. When you do, your request and your appointment are sent to Shari together.</p>
+    <p><strong>Your request has been sent to Shari.</strong> Now choose a time below and confirm it to book your meeting.</p>
     <div id="scheduler-frame" class="scheduler-frame"></div>
     <p id="scheduler-status" class="form-status" role="status" aria-live="polite"></p>
     <div class="btn-row">
-      <button type="button" class="btn btn-outline" id="scheduler-back">Back to my answers</button>
-      <button type="button" class="btn btn-outline" id="scheduler-skip">Skip — send my request without a time</button>
+      <button type="button" class="btn btn-outline" id="scheduler-skip">Skip — Shari will contact me to set a time</button>
     </div>
   </section>
   <p id="form-status" class="form-status" role="status" aria-live="polite"></p>

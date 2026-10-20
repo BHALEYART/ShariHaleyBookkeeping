@@ -234,8 +234,8 @@
       .then(function (res) {
         // FormSubmit sends success as the string "true"/"false".
         if (res.ok && String(res.body.success) !== "false") {
-          var thanks = form.dataset.thanks || "/thank-you/";
-          window.location.href = thanks + (opts.booked ? "?meeting=booked" : "");
+          if (opts.onSent) { opts.onSent(); return; }
+          goThanks(false);
         } else {
           throw new Error(res.body && res.body.message);
         }
@@ -256,11 +256,18 @@
       });
   }
 
+  function goThanks(booked) {
+    var thanks = form.dataset.thanks || "/thank-you/";
+    window.location.href = thanks + (booked ? "?meeting=booked" : "");
+  }
+
   /* ---------- Calendly step ----------
-     The scheduler is Shari's own Calendly page in an iframe, prefilled with the
-     visitor's name and email. Calendly creates the appointment when they confirm;
-     it then posts "calendly.event_scheduled" to this page, which sends the form
-     with the booking attached. Nothing loads from Calendly unless they opt in. */
+     When the visitor asks for a meeting, the form is SENT FIRST, so Shari gets
+     the request even if they never finish booking. Only after FormSubmit confirms
+     does Shari's Calendly open (prefilled with name and email). Calendly creates
+     the appointment and emails Shari the time itself; when it posts
+     "calendly.event_scheduled", this page moves on to the thank-you page.
+     Nothing loads from Calendly unless the visitor opts in. */
   function calendlySrc() {
     var q = [
       "embed_domain=" + encodeURIComponent(location.host || "localhost"),
@@ -296,18 +303,9 @@
     title.scrollIntoView({ block: "start" });
   }
 
-  function closeScheduler() {
-    scheduler.hidden = true;
-    steps.hidden = false;
-    if (bookBox) { bookBox.focus(); bookBox.scrollIntoView({ block: "center" }); }
-  }
-
   if (scheduler) {
-    document.getElementById("scheduler-back").addEventListener("click", closeScheduler);
-    document.getElementById("scheduler-skip").addEventListener("click", function () {
-      send({ meeting_requested: "Yes", meeting_booked: "No (skipped scheduling)" },
-           { statusEl: schedStatus });
-    });
+    // The request is already sent at this point, so skipping just finishes.
+    document.getElementById("scheduler-skip").addEventListener("click", function () { goThanks(false); });
 
     window.addEventListener("message", function (e) {
       if (e.origin !== CALENDLY_ORIGIN || scheduler.hidden) return;
@@ -325,17 +323,9 @@
         schedStatus.className = "form-status";
         schedStatus.textContent = "Time selected. Confirm it in the scheduler to finish.";
       } else if (d.event === "calendly.event_scheduled") {
-        send({
-          meeting_requested: "Yes",
-          meeting_booked: "Yes, booked on Calendly (see Calendly for the time)",
-          meeting_event: (payload.event && payload.event.uri) || "",
-          meeting_invitee: (payload.invitee && payload.invitee.uri) || ""
-        }, {
-          statusEl: schedStatus,
-          booked: true,
-          sendingText: "Meeting booked. Sending your request…",
-          failText: "Your meeting is booked, but your answers didn't send. Please press “Skip” to try sending again, or call 386-320-9378."
-        });
+        schedStatus.className = "form-status is-success";
+        schedStatus.textContent = "Meeting booked. Taking you to your confirmation…";
+        goThanks(true);
       }
     });
   }
@@ -349,7 +339,16 @@
     if (problems.length) { showSummary(problems); return; }
     summary.hidden = true;
 
-    if (wantsMeeting()) { openScheduler(); return; }
+    if (wantsMeeting()) {
+      send({ meeting_requested: "Yes, choosing a time on Calendly (Calendly emails the booked time)" }, {
+        sendingText: "Sending your request, then opening Shari’s calendar…",
+        onSent: function () {
+          status.textContent = "";
+          openScheduler();
+        }
+      });
+      return;
+    }
     send(bookBox ? { meeting_requested: "No" } : {});
   });
 })();
