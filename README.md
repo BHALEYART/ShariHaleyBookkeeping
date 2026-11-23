@@ -10,6 +10,7 @@ Static rebuild of the Shari Haley Bookkeeping site (replacing the WordPress/Elem
 | `/about-us/` | About Shari, mission, values, video |
 | `/our-services/` | Services detail + FAQ |
 | `/contact/` | Free consultation intake form (`#consultation`) |
+| `/blog/` | Blog index, posts at `/blog/<slug>/`, RSS at `/blog/feed.xml` |
 | `/thank-you/` | Form confirmation (noindex) |
 | `/accessibility/`, `/privacy/` | Statements |
 | `404.html` | Not-found page |
@@ -28,9 +29,19 @@ Old WordPress URLs (`/about/`, `/wp-admin/`, etc.) redirect via `vercel.json`. T
 
 The form has an optional "Also book a meeting time" checkbox. When it's checked, "Continue to pick a time" **sends the form first** (marked `meeting_requested: Yes, choosing a time on Calendly`), so Shari gets the request even if the visitor never books. Only after the send succeeds does Shari's Calendly open (`https://calendly.com/sharihaleybookkeeping`, set in `data-calendly` on the form), with the visitor's name and email filled in. Calendly creates the appointment and emails Shari the time; the page then goes to the thank-you page. "Skip" just finishes, since the request is already sent.
 
+## Blog
+
+Posts live in `scripts/blog-posts/` as one HTML file each: a JSON block in `<!-- -->` at the top (title, description, audience, FAQ, related posts), then the article body. To add or edit a post, change those files and run:
+
+```
+python3 scripts/build-blog.py
+```
+
+That rebuilds every page under `/blog/`, the RSS feed, and the blog entries in `sitemap.xml`. Header and footer are copied from `about-us/index.html`, so change those there first. Audience is either `Business owners` or `CPAs & tax professionals`; the index groups posts by it.
+
 ## Editing
 
-Edit the HTML directly. Header, footer, and structured data (JSON-LD) are repeated in each page, so change them everywhere. Pages load `site.css?v=…` and `site.js?v=…`: when you change either file, change its `?v=` value on every page so browsers fetch the new copy instead of a cached one. When page content changes, update `<lastmod>` in `sitemap.xml`.
+Edit the HTML directly. Header, footer, and structured data (JSON-LD) are repeated in each page, so change them everywhere. Pages load `site.css?v=…` and `site.js?v=…`; after changing either file, run `python3 scripts/build-blog.py`, which updates the `?v=` value on every page so browsers fetch the new copy instead of a cached one. When page content changes, update `<lastmod>` in `sitemap.xml`.
 
 ## Accessibility
 

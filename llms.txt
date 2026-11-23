@@ -5,6 +5,7 @@
 ## Pages
 
 - [Home](https://sharihaleybookkeeping.com/): overview, credentials, client testimonials
-- [Services](https://sharihaleybookkeeping.com/our-services/): catch-up bookkeeping, clean-ups, monthly or quarterly bookkeeping (including payroll and tax prep assistance), executive administrative services, FAQ
+- [Services](https://sharihaleybookkeeping.com/our-services/): catch-up bookkeeping, clean-ups, monthly or quarterly bookkeeping (including payroll and tax prep assistance), QuickBooks training and certification prep, executive administrative services, FAQ
 - [About](https://sharihaleybookkeeping.com/about-us/): Shari Haley's background, mission, and values
 - [Contact](https://sharihaleybookkeeping.com/contact/): free, no-obligation consultation request form
+- [Blog](https://sharihaleybookkeeping.com/blog/): answers to common small business bookkeeping, QuickBooks, record-keeping, and tax-season questions, plus articles for CPAs and tax professionals about working with a bookkeeping partner
