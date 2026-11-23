@@ -24,6 +24,42 @@
     });
   }
 
+  /* ---------- Header: tighten once the page scrolls ---------- */
+  var header = document.querySelector(".site-header");
+  if (header) {
+    var ticking = false;
+    var onScroll = function () {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function () {
+        header.classList.toggle("is-scrolled", window.scrollY > 12);
+        ticking = false;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* ---------- Cards below the fold ease in once, as they scroll into view ---------- */
+  var revealEls = document.querySelectorAll("[data-reveal]");
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (revealEls.length && "IntersectionObserver" in window && !reduceMotion) {
+    document.documentElement.classList.add("reveal-ready");
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.12 });
+    revealEls.forEach(function (el) {
+      // stagger siblings in the same row
+      var i = Array.prototype.indexOf.call(el.parentNode.children, el);
+      el.style.setProperty("--d", (i % 3) * 0.09 + "s");
+      io.observe(el);
+    });
+  }
+
   /* ---------- YouTube facade (loads the player only on request) ---------- */
   document.querySelectorAll(".video-facade[data-video]").forEach(function (btn) {
     btn.addEventListener("click", function () {
