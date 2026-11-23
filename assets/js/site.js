@@ -60,6 +60,75 @@
     });
   }
 
+  /* ---------- Cost calculator ---------- */
+  var calc = document.getElementById("calc");
+  if (calc) {
+    var money = function (n) { return "$" + Math.round(n).toLocaleString("en-US"); };
+    var num = function (id) {
+      var v = parseFloat(document.getElementById(id).value);
+      return isFinite(v) && v > 0 ? v : 0;
+    };
+    var shown = {};
+    var calcReduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var setOut = function (id, value, fmt) {
+      var el = document.getElementById(id);
+      var from = shown[id] || 0;
+      shown[id] = value;
+      if (from === value) { el.textContent = fmt(value); return; }
+      var cell = el.parentNode;
+      cell.classList.remove("bump"); void cell.offsetWidth; cell.classList.add("bump");
+      if (calcReduce) { el.textContent = fmt(value); return; }
+      var start = null, dur = 450;
+      var step = function (ts) {
+        if (start === null) start = ts;
+        var t = Math.min(1, (ts - start) / dur), e = 1 - Math.pow(1 - t, 3);
+        el.textContent = fmt(from + (value - from) * e);
+        if (t < 1 && shown[id] === value) window.requestAnimationFrame(step);
+      };
+      window.requestAnimationFrame(step);
+    };
+    var summaryTimer;
+    var update = function () {
+      var hours = num("calc-hours") * 12;
+      var time = hours * num("calc-rate");
+      var cpa = num("calc-cpa-hours") * num("calc-cpa-rate");
+      var total = time + cpa;
+      var weeks = hours / 40;
+      setOut("out-hours", hours, function (n) { return Math.round(n).toLocaleString("en-US") + " hrs"; });
+      setOut("out-time", time, money);
+      setOut("out-cpa", cpa, money);
+      setOut("out-total", total, money);
+      document.getElementById("out-weeks").textContent = weeks >= 0.1
+        ? "That’s about " + (Math.round(weeks * 10) / 10) + " full workweeks a year."
+        : "";
+      // hand the numbers to the contact form
+      var note = "From the cost calculator: about " + num("calc-hours") + " hours a month on bookkeeping at " +
+        money(num("calc-rate")) + "/hr" + (cpa ? ", plus about " + money(cpa) + " a year in CPA cleanup" : "") +
+        ", roughly " + money(total) + " a year.";
+      document.getElementById("calc-cta").href = "../contact/?from=calculator&note=" + encodeURIComponent(note) + "#consultation";
+      clearTimeout(summaryTimer);
+      summaryTimer = setTimeout(function () {
+        document.getElementById("calc-summary").textContent = "Estimated yearly cost: " + money(total) + ", about " + Math.round(hours) + " hours.";
+      }, 700);
+    };
+    calc.querySelectorAll('input[type="range"]').forEach(function (r) {
+      var box = document.getElementById(r.dataset.for);
+      r.addEventListener("input", function () { box.value = r.value; update(); });
+      box.addEventListener("input", function () { r.value = box.value; });
+    });
+    calc.addEventListener("input", update);
+    shown = {};
+    update();
+  }
+
+  /* ---------- Contact form: carry over a note from the calculator ---------- */
+  var msgBox = document.getElementById("message");
+  if (msgBox && !msgBox.value) {
+    var params = new URLSearchParams(window.location.search);
+    var carried = params.get("note");
+    if (params.get("from") === "calculator" && carried) msgBox.value = carried.slice(0, 500);
+  }
+
   /* ---------- YouTube facade (loads the player only on request) ---------- */
   document.querySelectorAll(".video-facade[data-video]").forEach(function (btn) {
     btn.addEventListener("click", function () {

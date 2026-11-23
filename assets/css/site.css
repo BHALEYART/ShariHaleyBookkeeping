@@ -593,3 +593,45 @@ a:hover { color: var(--green-900); }
   color: var(--green-800); background: var(--green-100); border-radius: 999px; padding: 0.2rem 0.7rem;
 }
 .post-meta { font-size: 0.9rem; color: var(--ink-soft); font-weight: 600; }
+
+/* ---------- Cost calculator ---------- */
+.calc-shell { display: grid; gap: 2rem; align-items: start; }
+@media (min-width: 900px) { .calc-shell { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 2.5rem; } }
+.calc { padding: clamp(1.25rem, 4vw, 2rem); }
+.calc fieldset { border: 0; margin: 0 0 1.75rem; padding: 0; min-width: 0; }
+.calc fieldset:last-of-type { margin-bottom: 0; }
+.calc-field { margin-bottom: 1.4rem; }
+.calc legend .hint { font-family: var(--sans); font-size: 0.9rem; font-weight: 400; }
+.calc-field label { display: block; font-weight: 700; margin-bottom: 0.2rem; }
+.calc-input {
+  display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 0.35rem;
+  border: 2px solid #8a948f; border-radius: 8px; background: var(--white); padding: 0 0.75rem; min-height: 48px;
+}
+.calc-input:focus-within { border-color: var(--focus); outline: 3px solid var(--focus); outline-offset: 1px; }
+.calc-input input { width: 6.5ch; border: 0; padding: 0.6rem 0; font: inherit; font-size: 1.15rem; font-weight: 700; color: var(--green-900); background: transparent; font-variant-numeric: tabular-nums; }
+.calc-input input:focus { outline: none; }
+.calc-affix { color: var(--ink-soft); font-weight: 600; }
+.calc input[type="range"] { display: block; width: 100%; margin-top: 0.85rem; accent-color: var(--green-800); height: 1.5rem; cursor: pointer; }
+
+.calc-result { display: grid; gap: 1.25rem; }
+@media (min-width: 900px) { .calc-result { position: sticky; top: 6.5rem; } }
+.statement {
+  background: var(--white); border-radius: var(--radius); padding: 1.5rem 1.5rem 1.25rem;
+  border-top: 6px solid var(--green-800); box-shadow: var(--shadow);
+}
+.statement-title { font-size: 1.35rem; margin-bottom: 0.6rem; }
+.statement table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.statement th { text-align: left; font-weight: 500; padding: 0.55rem 0.75rem 0.55rem 0; }
+.statement td { text-align: right; white-space: nowrap; font-weight: 700; padding: 0.55rem 0; }
+.statement tbody tr + tr { border-top: 1px dotted var(--line); }
+.statement tfoot tr { border-top: 3px double var(--green-800); }
+.statement tfoot th { font-weight: 800; color: var(--green-900); padding-top: 0.8rem; }
+.statement tfoot td { font-family: var(--serif); font-size: clamp(1.8rem, 1.4rem + 1.2vw, 2.3rem); color: var(--green-900); padding-top: 0.7rem; }
+.statement-weeks { margin: 0.75rem 0 0; color: var(--ink-soft); }
+.calc-cta { background: var(--green-900); color: #e2ebe8; border-radius: var(--radius); padding: 1.4rem 1.5rem; }
+.calc-cta strong { color: var(--white); }
+.calc-cta .btn { margin-top: 0.4rem; background: var(--coral-500); color: var(--ink); }
+.calc-cta .btn:hover { background: var(--coral-300); color: var(--ink); }
+.callout-note { margin: 1rem 0 0; padding: 1rem; border-radius: 8px; background: var(--green-100); }
+@keyframes calc-bump { 0% { color: var(--coral-500); } 100% { color: inherit; } }
+.statement td.bump output { animation: calc-bump .7s ease-out; }
