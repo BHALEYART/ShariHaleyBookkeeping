@@ -200,7 +200,7 @@ a:hover { color: var(--green-900); }
 }
 .hero > .wrap {
   display: grid; gap: 3.5rem; align-items: center;
-  padding-block: clamp(2.75rem, 6vw, 5.5rem) clamp(4.5rem, 8vw, 6.5rem);
+  padding-block: clamp(2.75rem, 6vw, 5rem) clamp(6rem, 10vw, 7.5rem);
 }
 @media (min-width: 960px) { .hero > .wrap { grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr); gap: 4rem; } }
 
@@ -210,7 +210,7 @@ a:hover { color: var(--green-900); }
 .hero .btn-row { margin-top: 1.75rem; }
 .hero-note { margin: 1rem 0 0; font-size: 0.98rem; color: var(--ink-soft); max-width: 32rem; }
 
-.hero-visual { position: relative; width: min(100%, 25rem); justify-self: center; }
+.hero-visual { position: relative; width: min(100%, 23rem); justify-self: center; }
 .portrait {
   aspect-ratio: 507 / 565; overflow: hidden; background: var(--green-100);
   border-radius: 999px 999px 18px 18px; border: 6px solid var(--white);
@@ -220,8 +220,9 @@ a:hover { color: var(--green-900); }
 .pin-badge { position: absolute; top: 0.5rem; right: -1.5rem; width: 6.5rem; transform: rotate(7deg); filter: drop-shadow(0 8px 14px rgb(20 54 48 / 28%)); }
 .pin-badge img { width: 100%; height: auto; }
 
+/* Sits below the portrait and only tucks over its bottom edge, so it never covers her face. */
 .receipt-wrap {
-  position: absolute; left: -2.5rem; bottom: -3.5rem; width: 17.5rem;
+  position: relative; width: min(100%, 18rem); margin: -4.25rem 0 0 -2.5rem;
   transform: rotate(-3deg); filter: drop-shadow(0 14px 22px rgb(20 54 48 / 22%));
 }
 .receipt {
@@ -249,12 +250,11 @@ a:hover { color: var(--green-900); }
   transform: rotate(-13deg); opacity: 0.88; mix-blend-mode: multiply; pointer-events: none;
 }
 
-@media (min-width: 1180px) { .receipt-wrap { left: -5.5rem; } }
 @media (max-width: 1179px) { .pin-badge { right: -0.4rem; } }
 @media (max-width: 640px) { .hero::before { display: none; } }
 @media (max-width: 959px) {
   .hero-visual { width: min(100%, 22rem); }
-  .receipt-wrap { position: relative; left: auto; bottom: auto; width: min(100%, 19rem); margin: -3.5rem auto 0; transform: rotate(-2deg); }
+  .receipt-wrap { width: min(100%, 19rem); margin: -3.5rem auto 0; transform: rotate(-2deg); }
   .pin-badge { right: -0.75rem; width: 5.5rem; }
 }
 
@@ -281,6 +281,21 @@ a:hover { color: var(--green-900); }
 .receipt tbody tr:nth-child(3) { animation-delay: 1.45s; }
 .receipt tfoot tr { animation-delay: 1.7s; }
 .stamp { animation: h-stamp .45s cubic-bezier(.3,1.4,.6,1) 2.05s both; }
+
+/* At-a-glance facts: a solid strip that overlaps the bottom of the hero. */
+.facts { position: relative; z-index: 2; margin-top: -3.5rem; }
+.facts-list {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px;
+  background: rgb(246 179 165 / 30%); /* shows through the gaps as dividers */
+  border-radius: 16px; overflow: hidden; box-shadow: 0 22px 44px rgb(20 54 48 / 22%);
+}
+.fact { display: flex; flex-direction: column; gap: 0.2rem; padding: 1.5rem 1.6rem 1.6rem; background: var(--green-900); color: #dfe9e5; }
+.fact-icon { color: var(--coral-300); margin-bottom: 0.4rem; }
+.fact-value { font-family: var(--serif); font-size: clamp(1.8rem, 1.3rem + 1.3vw, 2.4rem); font-weight: 700; line-height: 1.1; color: var(--white); }
+.fact-label { font-size: 0.98rem; line-height: 1.35; }
+@media (max-width: 860px) { .facts-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } .fact { padding: 1.2rem 1.2rem 1.3rem; } }
+.fact { animation: h-rise .6s cubic-bezier(.2,.7,.2,1) both; animation-delay: calc(0.35s + var(--i, 0) * 120ms); }
 
 /* Below-the-fold cards ease in once as they scroll into view (JS adds .reveal-ready). */
 @media (prefers-reduced-motion: no-preference) {
